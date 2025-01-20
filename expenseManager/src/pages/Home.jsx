@@ -1,9 +1,12 @@
 import React from 'react'
-import { Header } from '../components'
+import { Card, Dashboard, Header } from '../components'
 
 function Home() {
   return (
+    <>
     <Header/>
+    <Dashboard/>
+    </>
   )
 }
 

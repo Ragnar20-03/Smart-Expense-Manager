@@ -7,4 +7,7 @@ import AddExpenses from "../pages/AddExpenses";
 import ViewExpenses from "../pages/ViewExpenses";
 import Trends from "../pages/Trends";
 import Profile from "../pages/Profile";
-export {Dashboard,Footer,Card,Header,Home,AddExpenses,ViewExpenses,Trends,Profile}
+import LinkButton from "./LinkButton/LinkButton";
+
+
+export {Dashboard,Footer,Card,Header,Home,AddExpenses,ViewExpenses,Trends,Profile,LinkButton}
