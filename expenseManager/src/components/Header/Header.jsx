@@ -8,7 +8,8 @@ function Header() {
     return (
         <div className="nav">
             <div className="navLogo">
-                <Link to="/"><img src="../../Public/images/Logo.png" alt="Logo" /></Link></div>
+                <Link to="/"><img src="../../images/Logo.png" alt="Logo" /></Link>
+            </div>
                
             <div className="navElement">
             <ul>

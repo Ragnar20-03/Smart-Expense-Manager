@@ -1,11 +1,12 @@
 import React from 'react'
-import { Card, Dashboard, Header } from '../components'
+import { Card, Dashboard, Header,Footer } from '../components'
 
 function Home() {
   return (
     <>
     <Header/>
     <Dashboard/>
+    {/* <Footer/> */}
     </>
   )
 }

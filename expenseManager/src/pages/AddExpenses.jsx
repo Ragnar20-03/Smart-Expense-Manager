@@ -1,8 +1,12 @@
 import React from 'react'
+import { AddExpenseForm } from '../components'
 
 function AddExpenses() {
   return (
-    <div>AddExpenses</div>
+   <>
+    <h1>Add Expenses</h1>
+    <AddExpenseForm/>
+   </>
   )
 }
 
