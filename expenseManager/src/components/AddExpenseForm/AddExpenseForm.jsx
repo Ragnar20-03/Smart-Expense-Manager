@@ -35,17 +35,17 @@ function AddExpenseForm() {
             </div>
 
            <div className="subDiv">
-           <label htmlFor="date">Date</label>
+           <label htmlFor="date">Date : </label>
            <input type="date" name="date" id="date" />
            </div>
 
            <div className="subDiv">
-           <label htmlFor="date">Bill</label>
+           <label htmlFor="date">Bill : </label>
            <input type="file" name="bill" id="bill" />
            </div>
 
             <div className="subDiv">
-            <label htmlFor="description">Description</label>
+            <label htmlFor="description">Description : </label>
             <textarea name="description" id="description"></textarea>
             </div>
         </form>

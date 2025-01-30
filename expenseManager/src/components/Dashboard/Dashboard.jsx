@@ -4,8 +4,8 @@ import {Card,LinkButton} from "../index.js"
 
 function Dashboard() {
   return (
-   <>
-   <h1>DashBoard</h1>
+   <div className="dashboardMain">
+    <h1>DashBoard</h1>
    <div className="dashboard">
     <Card children="Total Expenses" amount={1345}/>
         <Card children="Budget" amount={5431}/>
@@ -16,7 +16,7 @@ function Dashboard() {
 
       <LinkButton children="View Expenses" url="view-expenses"/>
    </div>
-   </>
+   </div>
   )
 }
 

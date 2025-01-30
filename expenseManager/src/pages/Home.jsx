@@ -6,7 +6,7 @@ function Home() {
     <>
     <Header/>
     <Dashboard/>
-    {/* <Footer/> */}
+    <Footer/>
     </>
   )
 }

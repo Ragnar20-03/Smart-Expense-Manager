@@ -5,10 +5,26 @@ import Header from "./Header/Header";
 import Home from "../pages/home";
 import AddExpenses from "../pages/AddExpenses";
 import ViewExpenses from "../pages/ViewExpenses";
-import Trends from "../pages/Trends";
+import Trends from "../pages/Trends/Trends";
 import Profile from "../pages/Profile";
 import LinkButton from "./LinkButton/LinkButton";
 import AddExpenseForm from "./AddExpenseForm/AddExpenseForm";
+import ExpensesBar from "./ExpensesBar/ExpensesBar";
+import Test from "../pages/test";
 
 
-export {Dashboard,Footer,Card,Header,Home,AddExpenses,ViewExpenses,Trends,Profile,LinkButton,AddExpenseForm}
+export {Dashboard,
+    Footer,
+    Card,
+    Header,
+    Home,
+    AddExpenses,
+    ViewExpenses,
+    Trends,
+    Profile,
+    LinkButton,
+    AddExpenseForm,
+    ExpensesBar,
+    Test
+
+}
