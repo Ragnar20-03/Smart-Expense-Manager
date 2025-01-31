@@ -11,6 +11,7 @@ import LinkButton from "./LinkButton/LinkButton";
 import AddExpenseForm from "./AddExpenseForm/AddExpenseForm";
 import ExpensesBar from "./ExpensesBar/ExpensesBar";
 import Test from "../pages/test";
+import Btn from "../components/Btn/Btn.jsx"
 
 
 export {Dashboard,
@@ -25,6 +26,7 @@ export {Dashboard,
     LinkButton,
     AddExpenseForm,
     ExpensesBar,
-    Test
+    Test,
+    Btn
 
 }

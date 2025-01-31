@@ -11,7 +11,7 @@ function Dashboard() {
         <Card children="Budget" amount={5431}/>
         <Card children="Remaining Amount" amount={5431-1345}/>
    </div>
-   <div className="btns">
+   <div className="btnss">
       <LinkButton children="Add Expenses" url="add-expenses"/>
 
       <LinkButton children="View Expenses" url="view-expenses"/>
