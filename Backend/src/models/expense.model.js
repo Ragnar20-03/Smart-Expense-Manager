@@ -8,6 +8,10 @@ const expenseSchema = new mongoose.Schema(
             required:true,
             trim:true,
         },
+        user_id:{
+            type:String,
+            required:true,
+        },
         category:{
             type:String,
             required:true,

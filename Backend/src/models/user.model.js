@@ -36,12 +36,6 @@ const userSchema=new mongoose.Schema({
     expenseAmount:{
         type:Number,
     },
-    expensesList:[
-        {
-            type:mongoose.Schema.Types.ObjectId,
-            ref:"Expense"
-        }
-    ],
     refreshToken:{
         type:String,
     }
