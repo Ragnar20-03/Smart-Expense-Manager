@@ -8,7 +8,7 @@ const expenseSchema = new mongoose.Schema(
             required:true,
             trim:true,
         },
-        user_id:{
+        owner:{
             type:String,
             required:true,
         },

@@ -1,6 +1,7 @@
+
 import {Router} from "express"
-import {upload} from "../middlewares/multer.middleware.js"
-import { verifyJWT } from "../middlewares/auth.middleware.js"
+import {upload} from "src/middlewares/multer.middleware.js"
+import { verifyJWT } from "src/middlewares/auth.middleware.js"
 import {  
     changeCurrentPassword, 
     getCurrentUser,
@@ -11,16 +12,16 @@ import {
     updateAvator,
    updateBudget,
    userRegister
-         } from "../controllers/user.controller"
+         } from "src/controllers/user.controller.js";
 
 const router=Router();
 
 //  register route
 router.route("/register").post(
-    upload.fields({
+    upload.fields([{
         name:"avator",
         maxCount:1
-    }),
+    }]),
     userRegister);
 
 // login route
@@ -42,7 +43,8 @@ router.route("/current-user").get(verifyJWT, getCurrentUser)
 router.route("/update-details").patch(verifyJWT, updateAccountDetails)
 
 // update avator route
-router.route("/avator").patch(verifyJWT, upload.single("avator"), updateAvator);
+router.route("/update-avator").patch(verifyJWT, upload.single("avator"), updateAvator);
 
 // update budget route
 router.route("/update-budget").patch(verifyJWT, updateBudget)
+export default router

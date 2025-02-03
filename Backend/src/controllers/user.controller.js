@@ -1,9 +1,8 @@
-import { User } from "../models/user.model.js";
-import {asyncHandler} from "../utils/asyncHandler.js"
-import {uploadOnCloudinary} from "../utils/cloudinary.js"
-import {ApiError} from "../utils/ApiError.js"
-import {ApiResponse, Apiresponse} from "../utils/ApiResponse.js"
-import mongoose from "mongoose";
+import { User } from "src/models/user.model.js";
+import {asyncHandler} from "src/utils/asyncHandler.js"
+import {uploadOnCloudinary} from "src/utils/cloudinary.js"
+import {ApiError} from "src/utils/ApiError.js"
+import {ApiResponse} from "src/utils/ApiResponse.js"
 
 
 const generateAccessAndRefreshToken=async(userId)=>{
@@ -64,14 +63,14 @@ const userRegister=asyncHandler(async (req,res)=>{
     })
     // removing password and refreshtoken fro sending response
 
-    const createdUser=await user.findById(user._id).select("-password -refreshToken") ;
+    const createdUser=await User.findById(user._id).select("-password -refreshToken") ;
 
     // check for user creation 
     if(!createdUser){
         throw new ApiError(500,"Something went wrong while regestring the user !")
     }
     // return responses
-    return res.status(201).json(new Apiresponse(200,createdUser,"User Created Successfully !"));
+    return res.status(201).json(new ApiResponse(200,createdUser,"User Created Successfully !"));
 })
 
 const loginUser=asyncHandler(async (req,res)=>{
@@ -85,7 +84,7 @@ const loginUser=asyncHandler(async (req,res)=>{
  if(!user){
     throw new ApiError(400,"No Such user with above username exists !")
  }
- const isPassword=await user.ispasswordCorrect(password);
+ const isPassword=await user.isPasswordCorrect(password);
 
  if(!isPassword){
     throw new ApiError(400,"Password is incorrect ! ");
@@ -105,7 +104,7 @@ const loginUser=asyncHandler(async (req,res)=>{
  .status(201)
  .cookie("accessToken",accessToken,options)
  .cookie("refreshToken",refreshToken,options)
- .json(new Apiresponse(201,{user:loggedUser,accessToken,refreshToken},"Loggedin Successfull !"))
+ .json(new ApiResponse(201,{user:loggedUser,accessToken,refreshToken},"Loggedin Successfull !"))
 })
 
 const logoutUser=asyncHandler(async(req,res)=>{
@@ -131,12 +130,18 @@ const logoutUser=asyncHandler(async(req,res)=>{
 })
 
 const updateBudget=asyncHandler(async(req,res)=>{
-    const budgetAmount=req.body;
+    const {budgetAmount}=req.body;
+    console.log("Request Body:", req.body);
 
   if(!budgetAmount){
     throw new ApiError(400,"All fields are required ! ");
   }
-
+  if (typeof(budgetAmount) === "string") {
+    budgetAmount = Number(budgetAmount);
+  }
+  if (isNaN(budgetAmount) || typeof (budgetAmount) !== "number") {
+    throw new ApiError(400,"Invalid budget Amount")
+  }
   const user =await User.findByIdAndUpdate(
     req.user._id,
     {
@@ -158,9 +163,9 @@ const updateBudget=asyncHandler(async(req,res)=>{
             ))
 })
 const updateAccountDetails=asyncHandler(async(req,res)=>{
-    const {fullname,email}=req.body;
+    const {name,email}=req.body;
 
-  if(!fullname ||!email){
+  if(!name ||!email){
     throw new ApiError(400,"All fields are required ! ");
   }
 
@@ -168,7 +173,7 @@ const updateAccountDetails=asyncHandler(async(req,res)=>{
     req.user._id,
     {
       $set:{
-        fullname,email
+        name,email
       }
     },
     {
@@ -230,7 +235,8 @@ const getCurrentUser=asyncHandler(async (req,res)=>{
   })
 
   const refreshAccessToken = asyncHandler(async (req,res)=>{
-    const incomingRefreshToken=req.cookie.refreshToken || req.body.refreshToken;
+    
+    const incomingRefreshToken=req.cookies.refreshToken || req.body.refreshToken;
  
     if(!incomingRefreshToken){
      throw new ApiError(401 ," Unauthorised request ! ");
@@ -239,7 +245,7 @@ const getCurrentUser=asyncHandler(async (req,res)=>{
     try {
      const decodedToken = jwt.verify(incomingRefreshToken,process.env.REFRESH_TOKEN_SECRET)
   
-     const user=await User.findById(decodedToken._id)
+     const user=await User.findById(decodedToken?._id)
   
      if(!user){
       throw new ApiError(401,"Invalid refresh token");
@@ -250,13 +256,17 @@ const getCurrentUser=asyncHandler(async (req,res)=>{
   
     const options={
       httpOnly:true,
-      secure:true
+      secure:true,
     }
     
-   const {accessToken,newRefreshToken}=await generateAccessAndRefreshToken(user._id) 
-  
-   return res.status(200).cookie("accessToken",accessToken,options).cookie("refreshToken",newRefreshToken,options).json(
-    new ApiResponse(200,{accessToken,newRefreshToken},"Access token refresh")
+   const {accessToken,newRefreshToken}=await generateAccessAndRefreshToken(user._id) ;
+
+   return res
+   .status(200)
+   .cookie("accessToken",accessToken,options)
+   .cookie("refreshToken",newRefreshToken,options)
+   .json(
+    new ApiResponse(200,{accessToken,refreshToken:newRefreshToken},"Access token refresh")
    )
     } catch (error) {
      throw new ApiError(401,error?.message || "Invalid refresh token ! ");
