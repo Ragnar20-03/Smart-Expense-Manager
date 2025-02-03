@@ -1,8 +1,9 @@
-import { User } from "src/models/user.model.js";
-import {asyncHandler} from "src/utils/asyncHandler.js"
-import {uploadOnCloudinary} from "src/utils/cloudinary.js"
-import {ApiError} from "src/utils/ApiError.js"
-import {ApiResponse} from "src/utils/ApiResponse.js"
+import { User } from "../models/user.model.js";
+import {asyncHandler} from "../utils/asyncHandler.js"
+import {uploadOnCloudinary} from "../utils/cloudinary.js"
+import {ApiError} from "../utils/ApiError.js"
+import {ApiResponse} from "../utils/ApiResponse.js"
+import jwt from "jsonwebtoken"
 
 
 const generateAccessAndRefreshToken=async(userId)=>{
@@ -162,6 +163,7 @@ const updateBudget=asyncHandler(async(req,res)=>{
               "Details updated Successfully "
             ))
 })
+
 const updateAccountDetails=asyncHandler(async(req,res)=>{
     const {name,email}=req.body;
 
@@ -189,6 +191,7 @@ const updateAccountDetails=asyncHandler(async(req,res)=>{
               "Details updated Successfully "
             ))
 })
+
 const updateAvator=asyncHandler(async(req,res)=>{
     const avatorLocalPath=req.file?.path;
   if(!avatorLocalPath){

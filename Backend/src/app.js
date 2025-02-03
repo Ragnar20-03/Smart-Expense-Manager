@@ -14,7 +14,7 @@ app.use(cookieParser())
 
 
 // user route immports 
-import userRouter from "src/routes/user.routes.js"
+import userRouter from "./routes/user.routes.js"
 
 app.use("/api/v1/users",userRouter)
 export{app};
