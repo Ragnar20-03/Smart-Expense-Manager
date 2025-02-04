@@ -7,6 +7,7 @@ const expenseSchema = new mongoose.Schema(
             lowercase:true,
             required:true,
             trim:true,
+            // unique:true,
         },
         owner:{
             type:String,
