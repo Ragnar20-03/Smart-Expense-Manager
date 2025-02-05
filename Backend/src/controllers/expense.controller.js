@@ -65,7 +65,7 @@ const addExpense = asyncHandler(async (req, res) => {
 })
 
 const updateExpense = asyncHandler(async (req, res) => {
-    const {expensesId}=req.params.id;
+    const expensesId=req.params.id;
     console.log("Expense ID:", expensesId);
     let { title, date, category, amount, description } = req.body;
 
