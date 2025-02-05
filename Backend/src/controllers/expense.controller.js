@@ -9,7 +9,7 @@ const addExpense = asyncHandler(async (req, res) => {
     // get data from user
     let { title, date, category, amount, description } = req.body;
 
-    // valiadet date is in correct form or not 
+    // validate date is in correct form or not 
     if (date) {
         // Convert from "DD-MM-YYYY" to "YYYY-MM-DD"
         const [day, month, year] = date.split("-");
@@ -20,8 +20,6 @@ const addExpense = asyncHandler(async (req, res) => {
             throw new ApiError(400, "Invalid date format! Use 'DD-MM-YYYY'.");
         }
     }
-
-
     // which user created it ?
     const user_id = req.user._id;
 
@@ -30,14 +28,12 @@ const addExpense = asyncHandler(async (req, res) => {
         throw new ApiError(400, "All fields are required ! ");
     }
     
-    // upload bill photo on cloudinary 
-    // console.log("Uploded file : ", req.file);
-    const billPhotoLocalPath = req.file?.bill_photo?.[0]?.path;
-    // if(!billPhotoLocalPath){
-    //     throw new ApiResponse(400,"Bill photo is not get send ! ");
-    // }
+    const billPhotoLocalPath = req.files?.bill_photo?.[0]?.path;
+    if(!billPhotoLocalPath){
+        throw new ApiResponse(400,"Bill photo is not get send ! ");
+    }
     const billPhoto = await uploadOnCloudinary(billPhotoLocalPath);
-    // console.log("link after uplaod cloudinary ",billPhoto.url);
+   
     // create expense user and upload it on Database
     const expense = await Expense.create({
         title,
@@ -45,7 +41,7 @@ const addExpense = asyncHandler(async (req, res) => {
         category,
         amount,
         description,
-        // bill_photo:billPhoto.url,
+        bill_photo:billPhoto.url,
         owner: user_id
     })
     const createdExpense = await Expense.findById(expense._id).select("");
@@ -63,10 +59,9 @@ const addExpense = asyncHandler(async (req, res) => {
         );
 
 })
-
 const updateExpense = asyncHandler(async (req, res) => {
     const expensesId=req.params.id;
-    console.log("Expense ID:", expensesId);
+    // console.log("Expense ID:", expensesId);
     let { title, date, category, amount, description } = req.body;
 
     // validate date is in correct form or not 
@@ -106,9 +101,19 @@ const updateExpense = asyncHandler(async (req, res) => {
 
     
 )
-
 const deleteExpense = asyncHandler(async (req, res) => {
-
+    const expensesId=req.params.id;
+    if(! expensesId){
+        throw new ApiError(400,"Unauthorised request");
+    }
+    const deletedExpense=await Expense.findByIdAndDelete(expensesId);
+    console.log(deletedExpense);
+    
+    if(!deletedExpense){
+        throw new ApiError(500,"Expenses not deleted");
+    }
+    return res.status(200)
+    .json(new ApiResponse(200,deleteExpense,"Expense Deleted Successfully !"));
 })
 const getExpenses = asyncHandler(async (req, res) => {
     const user=req.user._id;
@@ -127,12 +132,13 @@ const getExpenses = asyncHandler(async (req, res) => {
 
 const categoryWiseAmount = asyncHandler(async (req, res) => {
     const user=req.user._id;
+
     if(!user){
         throw new ApiError(400,"Unauthorised Request ! ");
     }
     const sortedAmount=await Expense.aggregate([
         {
-            $match:{owner:user}
+            $match:{owner: user.toString()}
         },
         {
             $group:{
@@ -142,11 +148,12 @@ const categoryWiseAmount = asyncHandler(async (req, res) => {
             }
         }
     ])
+  
     if(!sortedAmount){
         throw new ApiError(500,"something went wrong");
     }
 
-    return res.status(200).json(new ApiResponse(200,{sortedAmount},"Category wise segregated data"));
+    return res.status(200).json(new ApiResponse(200,sortedAmount,"Category wise segregated data"));
 })
 
 const categoryWiseExpense=asyncHandler(async (req,res)=>{
@@ -156,7 +163,7 @@ const categoryWiseExpense=asyncHandler(async (req,res)=>{
     }
     const sortedDataAmount=await Expense.aggregate([
         {
-            $match:{owner:user}
+            $match:{owner:user.toString()}
         },
         {
             $group:{
@@ -179,7 +186,7 @@ const getExpendAmount=asyncHandler(async (req,res)=>{
     }
     const totalExpenses=await Expense.aggregate([
         {
-            $match:{owner:user}
+            $match:{owner:user.toString()}
         },
         {
            $group:{
@@ -188,17 +195,11 @@ const getExpendAmount=asyncHandler(async (req,res)=>{
            }
         }
     ])
-    if(!totalExpenses.totalAmount || totalExpenses.totalAmount.length===0){
+    if(!totalExpenses){
         throw new ApiError(500,"something went wrong");
     }
-
-    return res.status(200).json(new ApiResponse(200,totalExpenses.totalAmount,"Expended Total Amount"));
+    return res.status(200).json(new ApiResponse(200,totalExpenses,"Expended Total Amount"));
 })
-
-const getBillPhoto = asyncHandler(async (req, res) => {
-
-})
-
 
 export {
     addExpense,
@@ -206,7 +207,6 @@ export {
     deleteExpense,
     getExpenses,
     categoryWiseAmount,
-    getBillPhoto,
     categoryWiseExpense,
-    getExpendAmount
+    getExpendAmount,
 }
