@@ -32,8 +32,9 @@ const addExpense = asyncHandler(async (req, res) => {
     if(!billPhotoLocalPath){
         throw new ApiResponse(400,"Bill photo is not get send ! ");
     }
-    const billPhoto = await uploadOnCloudinary(billPhotoLocalPath);
-   
+
+    const billPhoto=uploadOnCloudinary(billPhotoLocalPath);
+     
     // create expense user and upload it on Database
     const expense = await Expense.create({
         title,
@@ -59,6 +60,7 @@ const addExpense = asyncHandler(async (req, res) => {
         );
 
 })
+
 const updateExpense = asyncHandler(async (req, res) => {
     const expensesId=req.params.id;
     // console.log("Expense ID:", expensesId);
@@ -101,6 +103,7 @@ const updateExpense = asyncHandler(async (req, res) => {
 
     
 )
+
 const deleteExpense = asyncHandler(async (req, res) => {
     const expensesId=req.params.id;
     if(! expensesId){
@@ -115,6 +118,7 @@ const deleteExpense = asyncHandler(async (req, res) => {
     return res.status(200)
     .json(new ApiResponse(200,deleteExpense,"Expense Deleted Successfully !"));
 })
+
 const getExpenses = asyncHandler(async (req, res) => {
     const user=req.user._id;
     if(!user){
@@ -201,6 +205,10 @@ const getExpendAmount=asyncHandler(async (req,res)=>{
     return res.status(200).json(new ApiResponse(200,totalExpenses,"Expended Total Amount"));
 })
 
+const monthWiseAmount = asyncHandler(async (req,res)=>{
+
+})
+
 export {
     addExpense,
     updateExpense,
@@ -209,4 +217,5 @@ export {
     categoryWiseAmount,
     categoryWiseExpense,
     getExpendAmount,
+    monthWiseAmount
 }

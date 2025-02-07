@@ -12,6 +12,10 @@ import AddExpenseForm from "./AddExpenseForm/AddExpenseForm";
 import ExpensesBar from "./ExpensesBar/ExpensesBar";
 import Test from "../pages/test";
 import Btn from "../components/Btn/Btn.jsx"
+import Login from "./Login/Login.jsx";
+import Register from "./Register/Register.jsx";
+import LoginPage from "../pages/LoginPage.jsx";
+import RegisterPage from "../pages/RegisterPage.jsx";
 
 
 export {Dashboard,
@@ -27,6 +31,10 @@ export {Dashboard,
     AddExpenseForm,
     ExpensesBar,
     Test,
-    Btn
+    Btn,
+    Login,
+    Register,
+    LoginPage,
+    RegisterPage
 
 }
